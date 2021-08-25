@@ -3,6 +3,7 @@ import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import FileBase64 from "react-file-base64";
 import { Link } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 const Profile = () => {
   const [postPic, setPostPic] = useState(null);
   const [desc, setDesc] = useState("");
@@ -12,6 +13,8 @@ const Profile = () => {
   const setDescription = (e) => {
     setDesc(e.target.value);
   };
+  const userId = jwt_decode(document.cookie).userId;
+  console.log(userId);
   const postButton = (e) => {
     const postData = () => {
       fetch("http://localhost/post", {
@@ -21,7 +24,7 @@ const Profile = () => {
         },
         body: JSON.stringify({
           image: postPic,
-          userId: "6106212519d56c9e6d3826b0",
+          userId: userId,
           desc: desc,
         }),
       });

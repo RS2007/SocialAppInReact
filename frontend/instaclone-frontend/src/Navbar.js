@@ -4,6 +4,9 @@ import { BsPeopleFill } from "react-icons/bs";
 import { AiTwotoneMessage } from "react-icons/ai";
 import { Link } from "react-router-dom";
 const Navbar = () => {
+  const deleteCookie = () => {
+    document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  };
   return (
     <HStack justify="space-between" bg="#4167B1" color="white">
       <HStack height="8.1vh" width="70%">
@@ -26,7 +29,9 @@ const Navbar = () => {
       >
         <BsPeopleFill size={30} />
 
-        <AiTwotoneMessage size={30} />
+        <Link to="login">
+          <AiTwotoneMessage size={30} onClick={deleteCookie} />
+        </Link>
       </Flex>
     </HStack>
   );

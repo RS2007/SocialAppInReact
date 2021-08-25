@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import useFetch from "./useFetch";
 import { Flex, HStack, VStack, Box, Input, Button } from "@chakra-ui/react";
 import { useState } from "react";
+import jwt_decode from "jwt-decode";
 const CommentList = () => {
   const postId = useParams().id;
   const [commentValue, setCommentValue] = useState("");
@@ -23,6 +24,7 @@ const CommentList = () => {
     peopleLoading,
     commentLoading
   );
+  const userId = jwt_decode(document.cookie).userId;
   const changeCommentValue = (e) => {
     setCommentValue(e.target.value);
   };
@@ -35,7 +37,7 @@ const CommentList = () => {
       credentials: "include",
       body: JSON.stringify({
         postId: postId,
-        userId: "6106212519d56c9e6d3826b0",
+        userId: userId,
         commentBody: commentValue,
       }),
     });
@@ -93,7 +95,7 @@ const CommentList = () => {
               justify="space-between"
               w="78%"
             >
-              <Box height="30%" fontSize={11} fontWeight="bold" pl={2}>
+              <Box height="30%" fontSize={15} fontWeight="bold" pl={2}>
                 {!peopleLoading &&
                   peopleList &&
                   peopleList.find((people) => people._id === elem.userId)

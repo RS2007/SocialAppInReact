@@ -7,6 +7,7 @@ import Posting from "./Posting";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Profile from "./Profile,";
 import CommentList from "./CommentList";
+import Login from "./Login";
 function App() {
   return (
     <Router>
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route path="/post/:id">
             <CommentList />
+          </Route>
+          <Route path="/login">
+            <Login />
           </Route>
         </Switch>
       </ChakraProvider>
