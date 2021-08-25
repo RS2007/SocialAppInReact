@@ -2,6 +2,7 @@
 import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import FileBase64 from "react-file-base64";
+import { Link } from "react-router-dom";
 const Profile = () => {
   const [postPic, setPostPic] = useState(null);
   const [desc, setDesc] = useState("");
@@ -33,9 +34,11 @@ const Profile = () => {
         <FormLabel>Description</FormLabel>
         <Input type="text" value={desc} onChange={setDescription} />
         <FileBase64 onDone={postPhoto} />
-        <Button colorScheme="pink" onClick={postButton}>
-          Add Photo
-        </Button>
+        <Link to="/">
+          <Button colorScheme="pink" onClick={postButton}>
+            Add Photo
+          </Button>
+        </Link>
       </FormControl>
     </div>
   );

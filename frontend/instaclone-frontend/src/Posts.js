@@ -7,6 +7,10 @@ import useFetch from "./useFetch";
 
 const Posts = () => {
   const { imageList, error, loading } = useFetch("http://localhost/post");
+  const peopleFetch = useFetch("http://localhost/user");
+  const peopleError = peopleFetch.error;
+  const peopleLoading = peopleFetch.loading;
+  const peopleList = peopleFetch.imageList;
   console.log(imageList, error, loading);
   return (
     <Flex align="center" justify="center" direction="column">
@@ -64,10 +68,14 @@ const Posts = () => {
           >
             <Flex justify="space-between" w="100%" background="white">
               <Box w="22%">
-                <p>Image</p>
+                <p>
+                  {!peopleLoading &&
+                    peopleList.find((people) => people._id === elem.userId)
+                      .username}
+                </p>
               </Box>
               <Box w="90%">
-                <p>Dino posted an image</p>
+                <p>{elem.desc}</p>
               </Box>
             </Flex>
             <Flex
