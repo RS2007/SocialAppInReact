@@ -63,7 +63,7 @@ const Posts = () => {
             mt={10}
             justify="center"
             align="center"
-            w="80%" //{["85%", 500, "80%"]}
+            w="85%" //{["85%", 500, "80%"]}
             maxW="614px"
           >
             <Flex justify="space-between" w="100%" background="white">

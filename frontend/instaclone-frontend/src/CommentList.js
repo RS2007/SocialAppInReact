@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
 import useFetch from "./useFetch";
+import { Flex, HStack, VStack, Box, Input, Button } from "@chakra-ui/react";
+import { useState } from "react";
 const CommentList = () => {
   const postId = useParams().id;
+  const [commentValue, setCommentValue] = useState("");
   const commentFetch = useFetch("http://localhost/comment");
   const commentError = commentFetch.error;
   const commentLoading = commentFetch.loading;
@@ -20,26 +23,115 @@ const CommentList = () => {
     peopleLoading,
     commentLoading
   );
+  const changeCommentValue = (e) => {
+    setCommentValue(e.target.value);
+  };
+  const onSubmit = () => {
+    fetch("http://localhost/comment/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        postId: postId,
+        userId: "6106212519d56c9e6d3826b0",
+        commentBody: commentValue,
+      }),
+    });
+    window.location.reload(false);
+  };
 
   return (
-    <div>
-      {commentLoading && <div>Loading.....</div>}
-      {!commentLoading && (
-        <div>
-          {commentList.map((elem) => (
-            <div>
-              <h3>
+    <Flex align="center" justify="center" direction="column">
+      <Flex
+        w={["95%", "85%"]}
+        height="16vh"
+        background="white"
+        mt={10}
+        pt={1}
+        maxW="614px"
+      >
+        <VStack w="100%" pt={2}>
+          <HStack w="100%">
+            <Flex w="15%" align="center" justify="center">
+              <p>Image</p>
+            </Flex>
+            <Flex w="80%">
+              <Input
+                placeholder="Write a comment?"
+                bg="#F0F2F5"
+                w="95%"
+                value={commentValue}
+                onChange={changeCommentValue}
+              />
+            </Flex>
+          </HStack>
+          <Flex direction="row-reverse" align="right" w="76%">
+            <Button colorScheme="blue" onClick={onSubmit}>
+              POST
+            </Button>
+          </Flex>
+        </VStack>
+      </Flex>
+      {commentLoading && <div>Loading....</div>}
+      {!commentLoading &&
+        commentList.map((elem) => (
+          <HStack
+            w={["95%", "85%"]}
+            maxW="614px"
+            background="white"
+            mt={10}
+            height="12vh"
+          >
+            <Flex height="10%" justify="center" align="center" w="15%">
+              <p>Image</p>
+            </Flex>
+            <Flex
+              direction="column"
+              height="70%"
+              justify="space-between"
+              w="78%"
+            >
+              <Box height="30%" fontSize={11} fontWeight="bold" pl={2}>
                 {!peopleLoading &&
                   peopleList &&
                   peopleList.find((people) => people._id === elem.userId)
                     .username}
-              </h3>
-              <p>{elem.commentBody}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+              </Box>
+              <Box
+                height="70%"
+                fontSize={17}
+                background="#E5ECEC"
+                borderRadius="10px"
+                pr={2}
+                pl={2}
+                fontWeight="500"
+              >
+                {elem.commentBody}
+              </Box>
+            </Flex>
+          </HStack>
+        ))}
+    </Flex>
+    //<div>
+    //  {commentLoading && <div>Loading.....</div>}
+    //  {!commentLoading && (
+    //    <div>
+    //      {commentList.map((elem) => (
+    //        <div>
+    //          <h3>
+    //            {!peopleLoading &&
+    //              peopleList &&
+    //              peopleList.find((people) => people._id === elem.userId)
+    //                .username}
+    //          </h3>
+    //          <p>{elem.commentBody}</p>
+    //        </div>
+    //      ))}
+    //    </div>
+    //  )}
+    //</div>
   );
 };
 

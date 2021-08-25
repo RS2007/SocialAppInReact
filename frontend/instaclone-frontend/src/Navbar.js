@@ -5,14 +5,14 @@ import { AiTwotoneMessage } from "react-icons/ai";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
-    <HStack justify="space-between" bg="#0573E6" color="white">
+    <HStack justify="space-between" bg="#4167B1" color="white">
       <HStack height="8.1vh" width="70%">
         <Box>
           <Link to="/">
             <Image src={logo} w={10} h={10} ml={2} />
           </Link>
         </Box>
-        <Box fontSize={23} pl={5}>
+        <Box fontSize={20} pl={5}>
           <b>Hello World!</b>
         </Box>
       </HStack>

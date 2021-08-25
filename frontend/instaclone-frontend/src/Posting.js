@@ -11,7 +11,13 @@ const Posting = () => {
   };
 
   return (
-    <Flex mt={10} w="100%" h="12vh" alignItems="center" justifyContent="center">
+    <Flex
+      mt={10}
+      w="100%"
+      h="12.8vh"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Flex
         w="80%"
         backgroundColor="white"
