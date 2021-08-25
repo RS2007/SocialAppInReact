@@ -114,27 +114,7 @@ const CommentList = () => {
           </HStack>
         ))}
     </Flex>
-    //<div>
-    //  {commentLoading && <div>Loading.....</div>}
-    //  {!commentLoading && (
-    //    <div>
-    //      {commentList.map((elem) => (
-    //        <div>
-    //          <h3>
-    //            {!peopleLoading &&
-    //              peopleList &&
-    //              peopleList.find((people) => people._id === elem.userId)
-    //                .username}
-    //          </h3>
-    //          <p>{elem.commentBody}</p>
-    //        </div>
-    //      ))}
-    //    </div>
-    //  )}
-    //</div>
   );
 };
 
 export default CommentList;
-/* [fetch(commentURL),fetch(users)
- */
