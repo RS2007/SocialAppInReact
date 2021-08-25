@@ -7,6 +7,14 @@ module.exports.getComment = async (req, res) => {
     console.log(err.message);
   }
 };
+module.exports.getAllComments = async (req, res) => {
+  try {
+    const commentList = await commentModel.find({});
+    res.json(commentList);
+  } catch (err) {
+    res.json(err);
+  }
+};
 module.exports.postComment = async (req, res) => {
   try {
     const comment = new commentModel({

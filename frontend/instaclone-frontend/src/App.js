@@ -4,13 +4,28 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Navbar from "./Navbar";
 import Posts from "./Posts";
 import Posting from "./Posting";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Profile from "./Profile,";
+import CommentList from "./CommentList";
 function App() {
   return (
-    <ChakraProvider>
-      <Navbar />
-      <Posting />
-      <Posts />
-    </ChakraProvider>
+    <Router>
+      <ChakraProvider>
+        <Navbar />
+        <Switch>
+          <Route exact path="/">
+            <Posting />
+            <Posts />
+          </Route>
+          <Route path="/upload">
+            <Profile />
+          </Route>
+          <Route path="/post/:id">
+            <CommentList />
+          </Route>
+        </Switch>
+      </ChakraProvider>
+    </Router>
   );
 }
 

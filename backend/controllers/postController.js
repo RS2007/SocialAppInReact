@@ -7,6 +7,14 @@ module.exports.postGet = async (req, res) => {
     console.log(err.message);
   }
 };
+module.exports.getAllPosts = async (req, res) => {
+  try {
+    const postList = await postModel.find({});
+    res.json(postList);
+  } catch (err) {
+    res.json(err);
+  }
+};
 module.exports.postPost = async (req, res) => {
   try {
     const newPost = new postModel({

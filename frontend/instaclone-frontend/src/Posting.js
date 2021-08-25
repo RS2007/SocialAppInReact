@@ -3,6 +3,7 @@ import { FaBeer } from "react-icons/fa";
 import { AiFillVideoCamera } from "react-icons/ai";
 import { GoDeviceCamera } from "react-icons/go";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 const Posting = () => {
   const [captionInput, setCaptionInput] = useState("");
   const changeCaptionValue = (e) => {
@@ -10,12 +11,12 @@ const Posting = () => {
   };
 
   return (
-    <Flex mt={10} w="100%" h="10vh" alignItems="center" justifyContent="center">
+    <Flex mt={10} w="100%" h="12vh" alignItems="center" justifyContent="center">
       <Flex
         w="80%"
         backgroundColor="white"
         direction="column"
-        height="14vh"
+        height="15vh"
         maxW="614px"
       >
         <HStack spacing="10%" height="50%" mb={5} pl="5%">
@@ -41,7 +42,7 @@ const Posting = () => {
               <AiFillVideoCamera color="#F02849" size={30} />
             </Box>
             <Box>
-              <p>Live Media</p>
+              <Link to="/upload">Live Media</Link>
             </Box>
           </HStack>
           <Divider orientation="vertical" />

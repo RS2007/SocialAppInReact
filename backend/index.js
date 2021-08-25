@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 dotenv.config();
 const app = express();
 const mongoose = require("mongoose");
@@ -11,10 +12,15 @@ const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments.js");
 //middleware
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 app.use(helmet());
 app.use(morgan("common"));
-
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:3000"],
+  })
+);
 //routes
 app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
