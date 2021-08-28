@@ -5,16 +5,16 @@ import { Link } from "react-router-dom";
 import post1 from "./post1.jpg";
 import useFetch from "./useFetch";
 import jwt_decode from "jwt-decode";
-import { useState, useEffect } from "react";
 
 const Posts = () => {
-  const [liked, setLiked] = useState([]);
   const { imageList, error, loading } = useFetch("http://localhost/post");
-  const [color, setColor] = useState("");
   const peopleFetch = useFetch("http://localhost/user");
   const peopleError = peopleFetch.error;
   const peopleLoading = peopleFetch.loading;
   const peopleList = peopleFetch.imageList;
+  const commentFetch = useFetch("http://localhost/comment");
+  const commentList = commentFetch.imageList;
+  const commentLoading = commentFetch.loading;
   const liking = async (id) => {
     console.log("This is a like");
     const data = await fetch("http://localhost/post/like/" + id, {
@@ -107,9 +107,15 @@ const Posts = () => {
               direction="column"
             >
               {!loading && <Image src={elem.image} h="auto" m="auto" />}
-              <Box border="2px" w="100%">
-                Likes: {elem.likes.length}
-              </Box>
+              <Flex border="2px" w="100%">
+                <Box>Likes: {elem.likes.length}</Box>
+                <Box ml={2}>
+                  Comments:
+                  {!commentLoading &&
+                    commentList.filter((comment) => comment.postId === elem._id)
+                      .length}
+                </Box>
+              </Flex>
               <HStack
                 direction="row"
                 justify="space between"

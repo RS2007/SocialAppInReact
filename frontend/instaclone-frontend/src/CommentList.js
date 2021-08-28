@@ -16,6 +16,23 @@ const CommentList = () => {
   const peopleError = peopleFetch.error;
   const peopleLoading = peopleFetch.loading;
   const peopleList = peopleFetch.imageList;
+  const editComment = () => {
+    console.log("This is to edit the comment");
+  };
+  const deleteComment = (id) => {
+    console.log("This is to delete the comment");
+    fetch("http://localhost/comment/delete/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        userId: jwt_decode(document.cookie).userId,
+      }),
+    });
+    window.location.reload();
+  };
   console.log(
     commentList,
     peopleList,
@@ -84,7 +101,7 @@ const CommentList = () => {
             maxW="614px"
             background="white"
             mt={10}
-            height="12vh"
+            height="20vh"
           >
             <Flex height="10%" justify="center" align="center" w="15%">
               <p>Image</p>
@@ -95,23 +112,38 @@ const CommentList = () => {
               justify="space-between"
               w="78%"
             >
-              <Box height="30%" fontSize={15} fontWeight="bold" pl={2}>
+              <Box height="30%" fontSize={15} fontWeight="bold" pl={2} mb={2}>
                 {!peopleLoading &&
                   peopleList &&
                   peopleList.find((people) => people._id === elem.userId)
                     .username}
               </Box>
-              <Box
-                height="70%"
+              <Flex
+                height="65%"
                 fontSize={17}
                 background="#E5ECEC"
                 borderRadius="10px"
                 pr={2}
                 pl={2}
                 fontWeight="500"
+                mb={2}
+                alignItems="center"
               >
-                {elem.commentBody}
-              </Box>
+                <Box>{elem.commentBody}</Box>
+              </Flex>
+              <Flex height="30%">
+                <Box mr={5} onClick={editComment} cursor="pointer">
+                  Edit
+                </Box>
+                <Box
+                  onClick={() => {
+                    deleteComment(elem._id);
+                  }}
+                  cursor="pointer"
+                >
+                  Delete
+                </Box>
+              </Flex>
             </Flex>
           </HStack>
         ))}
