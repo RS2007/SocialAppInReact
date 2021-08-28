@@ -55,12 +55,12 @@ module.exports.postLike = async (req, res) => {
       await postModel.findByIdAndUpdate(req.params.id, {
         $push: { likes: req.body.userId },
       });
-      res.send("You have liked the post");
+      res.json({ msg: "You have liked the post" });
     } else {
       await postModel.findByIdAndUpdate(req.params.id, {
         $pull: { likes: req.body.userId },
       });
-      res.send("Your like is removed");
+      res.json({ msg: "Your like is removed" });
     }
   } catch (err) {
     console.log(err.message);

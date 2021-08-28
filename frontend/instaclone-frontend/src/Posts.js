@@ -1,16 +1,37 @@
 import { Box, Flex, HStack, Image } from "@chakra-ui/react";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import post1 from "./post1.jpg";
 import useFetch from "./useFetch";
+import jwt_decode from "jwt-decode";
+import { useState, useEffect } from "react";
 
 const Posts = () => {
+  const [liked, setLiked] = useState([]);
   const { imageList, error, loading } = useFetch("http://localhost/post");
+  const [color, setColor] = useState("");
   const peopleFetch = useFetch("http://localhost/user");
   const peopleError = peopleFetch.error;
   const peopleLoading = peopleFetch.loading;
   const peopleList = peopleFetch.imageList;
+  const liking = async (id) => {
+    console.log("This is a like");
+    const data = await fetch("http://localhost/post/like/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        userId: jwt_decode(document.cookie).userId,
+      }),
+    });
+    const msg = await data.clone().json();
+    window.location.reload();
+    console.log(msg);
+  };
+
   console.log(imageList, error, loading);
   return (
     <Flex align="center" justify="center" direction="column">
@@ -86,6 +107,9 @@ const Posts = () => {
               direction="column"
             >
               {!loading && <Image src={elem.image} h="auto" m="auto" />}
+              <Box border="2px" w="100%">
+                Likes: {elem.likes.length}
+              </Box>
               <HStack
                 direction="row"
                 justify="space between"
@@ -94,8 +118,33 @@ const Posts = () => {
                 spacing="10px"
                 height="5vh"
               >
-                <AiOutlineHeart size={30} />
-                <Link to={"post/" + elem._id}>
+                {console.log(
+                  elem.likes.find(
+                    (elem) => elem === jwt_decode(document.cookie).userId
+                  )
+                )}
+                {elem.likes.find(
+                  (elem) => elem === jwt_decode(document.cookie).userId
+                ) ? (
+                  <AiFillHeart
+                    size={30}
+                    onClick={() => {
+                      liking(elem._id);
+                    }}
+                    color="red"
+                    cursor="pointer"
+                  />
+                ) : (
+                  <AiOutlineHeart
+                    size={30}
+                    onClick={() => {
+                      liking(elem._id);
+                    }}
+                    cursor="pointer"
+                  />
+                )}
+
+                <Link to={`/post/${elem._id}`}>
                   <IoChatbubbleOutline size={30} />
                 </Link>
               </HStack>

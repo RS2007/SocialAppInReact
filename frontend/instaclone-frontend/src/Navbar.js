@@ -2,16 +2,18 @@ import { HStack, Box, Flex, Image } from "@chakra-ui/react";
 import logo from "./logo.png";
 import { BsPeopleFill } from "react-icons/bs";
 import { AiTwotoneMessage } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 const Navbar = () => {
-  const deleteCookie = () => {
-    document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  const history = useHistory();
+  const logout = () => {
+    document.cookie = "jwt= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    history.push("/login");
   };
   return (
     <HStack justify="space-between" bg="#4167B1" color="white">
       <HStack height="8.1vh" width="70%">
         <Box>
-          <Link to="/">
+          <Link to="/home">
             <Image src={logo} w={10} h={10} ml={2} />
           </Link>
         </Box>
@@ -28,10 +30,7 @@ const Navbar = () => {
         align="center"
       >
         <BsPeopleFill size={30} />
-
-        <Link to="login">
-          <AiTwotoneMessage size={30} onClick={deleteCookie} />
-        </Link>
+        <AiTwotoneMessage size={30} onClick={logout} />
       </Flex>
     </HStack>
   );

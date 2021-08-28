@@ -37,7 +37,7 @@ const Profile = () => {
         <FormLabel>Description</FormLabel>
         <Input type="text" value={desc} onChange={setDescription} />
         <FileBase64 onDone={postPhoto} />
-        <Link to="/">
+        <Link to="/home">
           <Button colorScheme="pink" onClick={postButton}>
             Add Photo
           </Button>

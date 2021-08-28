@@ -26,8 +26,10 @@ module.exports.loginPost = async (req, res) => {
     const { email, password } = req.body;
     const user = await userModel.login(email, password);
     jwtToken = await jwt.sign({ userId: user._id }, process.env.JWT_PASS);
+    console.log(user, jwtToken);
     res.cookie("jwt", jwtToken, {
-      maxAge: 3 * 60 * 60,
+      maxAge: 3 * 60 * 60 * 1000,
+      httpOnly: false,
     });
     res.json(user);
   } catch (err) {

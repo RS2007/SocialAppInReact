@@ -14,7 +14,7 @@ function App() {
       <ChakraProvider>
         <Navbar />
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/home">
             <Posting />
             <Posts />
           </Route>

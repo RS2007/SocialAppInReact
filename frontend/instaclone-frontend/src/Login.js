@@ -1,7 +1,6 @@
 import { Flex, Box, Input, Button } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import { useHistory } from "react-router-dom";
 const Login = () => {
   const history = useHistory();
 
@@ -23,12 +22,8 @@ const Login = () => {
         credentials: "include",
         body: JSON.stringify({ email: email, password: password }),
       });
-      const userId = jwt_decode(document.cookie).userId;
-      const user = await fetch("http://localhost/user/" + userId);
-      if (!user.ok) {
-        throw Error("this is an error");
-      }
-      console.log(await data.json());
+      console.log(document.cookie);
+      history.push("/home");
     } catch (err) {
       console.log(err.message);
       history.push("/login");
@@ -61,11 +56,9 @@ const Login = () => {
         </Flex>
       </Flex>
       <Box w="30%" mt={2}>
-        <Link to="/">
-          <Button colorScheme="blue" color="white" onClick={login}>
-            Login
-          </Button>
-        </Link>
+        <Button colorScheme="blue" color="white" onClick={login}>
+          Login
+        </Button>
       </Box>
     </Flex>
   );
