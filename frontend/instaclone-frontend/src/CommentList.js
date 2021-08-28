@@ -16,9 +16,21 @@ const CommentList = () => {
   const peopleError = peopleFetch.error;
   const peopleLoading = peopleFetch.loading;
   const peopleList = peopleFetch.imageList;
-  const editComment = () => {
-    console.log("This is to edit the comment");
+  const likeComment = (id) => {
+    console.log("This is to like the comment");
+    fetch("http://localhost/comment/like/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        userId: jwt_decode(document.cookie).userId,
+      }),
+    });
+    window.location.reload();
   };
+
   const deleteComment = (id) => {
     console.log("This is to delete the comment");
     fetch("http://localhost/comment/delete/" + id, {
@@ -119,7 +131,7 @@ const CommentList = () => {
                     .username}
               </Box>
               <Flex
-                height="65%"
+                height="70%"
                 fontSize={17}
                 background="#E5ECEC"
                 borderRadius="10px"
@@ -132,10 +144,8 @@ const CommentList = () => {
                 <Box>{elem.commentBody}</Box>
               </Flex>
               <Flex height="30%">
-                <Box mr={5} onClick={editComment} cursor="pointer">
-                  Edit
-                </Box>
                 <Box
+                  mr={5}
                   onClick={() => {
                     deleteComment(elem._id);
                   }}
@@ -143,6 +153,28 @@ const CommentList = () => {
                 >
                   Delete
                 </Box>
+                {elem.likes.find(
+                  (like) => like === jwt_decode(document.cookie).userId
+                ) ? (
+                  <Box
+                    onClick={() => {
+                      likeComment(elem._id);
+                    }}
+                    color="red"
+                    cursor="pointer"
+                  >
+                    Like
+                  </Box>
+                ) : (
+                  <Box
+                    onClick={() => {
+                      likeComment(elem._id);
+                    }}
+                    cursor="pointer"
+                  >
+                    Like
+                  </Box>
+                )}
               </Flex>
             </Flex>
           </HStack>

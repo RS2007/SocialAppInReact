@@ -6,5 +6,4 @@ router.get("/", commentController.getAllComments);
 router.post("/", commentController.postComment);
 router.delete("/delete/:id", commentController.deleteComment);
 router.put("/like/:id", commentController.likeComment);
-router.put("update/:id", commentController.updateComment);
 module.exports = router;

@@ -63,13 +63,3 @@ module.exports.likeComment = async (req, res) => {
     }
   }
 };
-module.exports.updateComment = async (req, res) => {
-  const comment = await commentModel.findById(req.params.id);
-  if (req.body.userId === comment.userId) {
-    await commentModel.findByIdAndUpdate(req.params.id, {
-      commentBody: req.body.commentBody,
-    });
-  } else {
-    res.send("You can only edit your own comment");
-  }
-};
