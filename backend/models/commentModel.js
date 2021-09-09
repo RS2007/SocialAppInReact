@@ -6,7 +6,7 @@ const commentSchema = new Schema({
     type: String,
     required: [true, "You can only comment on a post"],
   },
-  userId: {
+  userId:{
     type: String,
     required: [true, "You must be a user"],
   },

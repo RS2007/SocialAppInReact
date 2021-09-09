@@ -29,10 +29,8 @@ const Posts = () => {
     });
     const msg = await data.clone().json();
     window.location.reload();
-    console.log(msg);
   };
 
-  console.log(imageList, error, loading);
   return (
     <Flex align="center" justify="center" direction="column">
       <Flex
@@ -64,7 +62,6 @@ const Posts = () => {
             direction="row"
             justify="space between"
             w="100%"
-            border="2px"
             spacing="10px"
             height="5vh"
           >
@@ -88,14 +85,26 @@ const Posts = () => {
             maxW="614px"
           >
             <Flex justify="space-between" w="100%" background="white">
-              <Box w="22%">
+              <Box width="10%" borderRaduis="50%">
+                <Image
+                  src={
+                    !peopleLoading &&
+                    peopleList.find((people) => people._id === elem.userId)
+                      .profilePicture
+                  }
+                  width="100%"
+                  height="auto"
+                  display="inline"
+                />
+              </Box>
+              <Box w="25%">
                 <p>
                   {!peopleLoading &&
                     peopleList.find((people) => people._id === elem.userId)
                       .username}
                 </p>
               </Box>
-              <Box w="90%">
+              <Box w="76%">
                 <p>{elem.desc}</p>
               </Box>
             </Flex>
@@ -105,9 +114,10 @@ const Posts = () => {
               w="100%" //{["100%", 500, "80%"]}
               maxW="614px"
               direction="column"
+              border="2px"
             >
               {!loading && <Image src={elem.image} h="auto" m="auto" />}
-              <Flex border="2px" w="100%">
+              <Flex w="100%" border="2px">
                 <Box>Likes: {elem.likes.length}</Box>
                 <Box ml={2}>
                   Comments:

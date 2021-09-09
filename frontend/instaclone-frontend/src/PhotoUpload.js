@@ -4,7 +4,7 @@ import { useState } from "react";
 import FileBase64 from "react-file-base64";
 import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-const Profile = () => {
+const PhotoUpload = () => {
   const [postPic, setPostPic] = useState(null);
   const [desc, setDesc] = useState("");
   const postPhoto = (e) => {
@@ -14,7 +14,6 @@ const Profile = () => {
     setDesc(e.target.value);
   };
   const userId = jwt_decode(document.cookie).userId;
-  console.log(userId);
   const postButton = (e) => {
     const postData = () => {
       fetch("http://localhost/post", {
@@ -47,4 +46,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default PhotoUpload;

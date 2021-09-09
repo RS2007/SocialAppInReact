@@ -5,9 +5,11 @@ import Navbar from "./Navbar";
 import Posts from "./Posts";
 import Posting from "./Posting";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Profile from "./Profile,";
 import CommentList from "./CommentList";
 import Login from "./Login";
+import PhotoUpload from "./PhotoUpload";
+import FriendList from "./FriendList";
+import Search from "./Search";
 function App() {
   return (
     <Router>
@@ -19,13 +21,19 @@ function App() {
             <Posts />
           </Route>
           <Route path="/upload">
-            <Profile />
+            <PhotoUpload />
+          </Route>
+          <Route path="/friends">
+            <FriendList />
           </Route>
           <Route path="/post/:id">
             <CommentList />
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/search">
+            <Search />
           </Route>
         </Switch>
       </ChakraProvider>

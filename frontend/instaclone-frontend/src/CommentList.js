@@ -1,6 +1,14 @@
 import { useParams } from "react-router-dom";
 import useFetch from "./useFetch";
-import { Flex, HStack, VStack, Box, Input, Button } from "@chakra-ui/react";
+import {
+  Flex,
+  HStack,
+  VStack,
+  Box,
+  Input,
+  Button,
+  Image,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import jwt_decode from "jwt-decode";
 const CommentList = () => {
@@ -76,7 +84,7 @@ const CommentList = () => {
   return (
     <Flex align="center" justify="center" direction="column">
       <Flex
-        w={["95%", "85%"]}
+        w={["100%", "85%"]}
         height="16vh"
         background="white"
         mt={10}
@@ -116,7 +124,14 @@ const CommentList = () => {
             height="20vh"
           >
             <Flex height="10%" justify="center" align="center" w="15%">
-              <p>Image</p>
+              <Image
+                src={
+                  !peopleLoading &&
+                  peopleList &&
+                  peopleList.find((people) => people._id === elem.userId)
+                    .profilePicture
+                }
+              />
             </Flex>
             <Flex
               direction="column"

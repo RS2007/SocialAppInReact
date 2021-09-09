@@ -76,7 +76,7 @@ module.exports.userUnfollow = async (req, res) => {
         await userModel.findByIdAndUpdate(req.body.userId, {
           $pull: { following: req.params.id },
         });
-        res.send(done);
+        res.send("done");
       } else {
         res.send("U cant unfollow a user you are not following");
       }

@@ -22,7 +22,6 @@ const Login = () => {
         credentials: "include",
         body: JSON.stringify({ email: email, password: password }),
       });
-      console.log(document.cookie);
       history.push("/home");
     } catch (err) {
       console.log(err.message);

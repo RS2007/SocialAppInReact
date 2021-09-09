@@ -1,13 +1,12 @@
 import { HStack, Box, Flex, Image } from "@chakra-ui/react";
 import logo from "./logo.png";
 import { BsPeopleFill } from "react-icons/bs";
-import { AiTwotoneMessage } from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
 import { Link, useHistory } from "react-router-dom";
 const Navbar = () => {
   const history = useHistory();
-  const logout = () => {
-    document.cookie = "jwt= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-    history.push("/login");
+  const searchAllUsers = () => {
+    history.push("/search");
   };
   return (
     <HStack justify="space-between" bg="#4167B1" color="white">
@@ -29,8 +28,11 @@ const Navbar = () => {
         maxWidth="200px"
         align="center"
       >
-        <BsPeopleFill size={30} />
-        <AiTwotoneMessage size={30} onClick={logout} />
+        <Link to="/friends/">
+          <BsPeopleFill size={30} />
+        </Link>
+
+        <AiOutlineSearch size={30} onClick={searchAllUsers} />
       </Flex>
     </HStack>
   );
