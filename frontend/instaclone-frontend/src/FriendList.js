@@ -43,7 +43,7 @@ const FriendList = () => {
   };
   const unfollowUser = async (id) => {
     try {
-      const data = await fetch("http://localhost/user/unfollow/" + id, {
+      const data = await fetch("http://localhost/user/follow/" + id, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -135,7 +135,7 @@ const FriendList = () => {
                 }}
                 cursor="pointer"
               >
-                Unfollow
+               Unfollow 
               </Flex>
             </Flex>
           ))}
@@ -166,7 +166,7 @@ const FriendList = () => {
                 </Flex>
               </Flex>
               <Flex align="center" width="20%" color="#199ff6">
-                Unfollow
+                Follow
               </Flex>
             </Flex>
           ))}

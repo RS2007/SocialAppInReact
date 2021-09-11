@@ -84,7 +84,7 @@ const Posts = () => {
             w="85%" //{["85%", 500, "80%"]}
             maxW="614px"
           >
-            <Flex justify="space-between" w="100%" background="white">
+            <Flex justify="space-between" w="100%" background="white" height="5vh">
               <Box width="10%" borderRaduis="50%">
                 <Image
                   src={
@@ -95,6 +95,7 @@ const Posts = () => {
                   width="100%"
                   height="auto"
                   display="inline"
+                  objectFit="contain"
                 />
               </Box>
               <Box w="25%">
@@ -116,7 +117,7 @@ const Posts = () => {
               direction="column"
               border="2px"
             >
-              {!loading && <Image src={elem.image} h="auto" m="auto" />}
+              {!loading && <Image src={elem.image} h="auto" w="100%" />}
               <Flex w="100%" border="2px">
                 <Box>Likes: {elem.likes.length}</Box>
                 <Box ml={2}>

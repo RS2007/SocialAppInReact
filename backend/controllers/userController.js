@@ -55,7 +55,15 @@ module.exports.userFollows = async (req, res) => {
         });
         res.send("Done");
       } else {
-        res.send("you are already following this user");
+        if(user.followers.includes(req.body.userId)){
+          await userModel.findByIdAndUpdate(req.params.id,{
+            $pull:{followers:req.body.userId}
+          });
+          await userModel.findByIdAndUpdate(req.body.userId,{
+            $pull:{following:req.params.id},
+          });
+          res.send('done');
+        }
       }
     } catch (err) {
       console.log(err.message);
@@ -64,26 +72,4 @@ module.exports.userFollows = async (req, res) => {
     res.send("you cannot follow yourself");
   }
 };
-module.exports.userUnfollow = async (req, res) => {
-  if (req.body.userId !== req.params.id) {
-    try {
-      const user = await userModel.findById(req.params.id);
-      const currentUser = await userModel.findById(req.body.userId);
-      if (user.followers.includes(req.body.userId)) {
-        await userModel.findByIdAndUpdate(req.params.id, {
-          $pull: { followers: req.body.userId },
-        });
-        await userModel.findByIdAndUpdate(req.body.userId, {
-          $pull: { following: req.params.id },
-        });
-        res.send("done");
-      } else {
-        res.send("U cant unfollow a user you are not following");
-      }
-    } catch (err) {
-      console.log(err.message);
-    }
-  } else {
-    res.send("What are you doing?");
-  }
-};
+

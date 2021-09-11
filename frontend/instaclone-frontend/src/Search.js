@@ -1,4 +1,5 @@
 import { Flex, Box, Input, Image } from "@chakra-ui/react";
+import jwt_decode from "jwt-decode"
 import { useState } from "react";
 import useFetch from "./useFetch";
 const Search = () => {
@@ -10,6 +11,33 @@ const Search = () => {
     setSearchText(e.target.value);
   };
   const [searchText, setSearchText] = useState("");
+  const userId = jwt_decode(document.cookie).userId;
+  console.log(userId)
+  const follow = async (id)=>{
+
+    try {
+      const data = await fetch("http://localhost/user/follow/" + id, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: jwt_decode(document.cookie).userId,
+        }),
+      });
+      if (!data.ok) {
+        alert("Unable to connect to servers");
+      } else {
+        window.location.reload();
+        alert("Unfollowed succesfully");
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  
   return (
     <Flex align="center" direction="column" justify="center">
       <Flex
@@ -54,8 +82,8 @@ const Search = () => {
                   {elem.username}
                 </Flex>
               </Flex>
-              <Flex align="center" width="20%" color="#199ff6" cursor="pointer">
-                Follow
+              <Flex align="center" width="20%" color="#199ff6" cursor="pointer" onClick={()=>{follow(elem._id)}}>
+                {elem.followers.find(elem=>elem === userId )?"Unfollow":"Follow"}
               </Flex>
             </Flex>
           ))}
