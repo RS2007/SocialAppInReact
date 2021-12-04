@@ -4,6 +4,7 @@ const cors = require("cors");
 dotenv.config();
 const app = express();
 const mongoose = require("mongoose");
+const cookieParser=require("cookie-parser");
 const port = process.env.PORT;
 const morgan = require("morgan");
 const helmet = require("helmet");
@@ -15,6 +16,7 @@ const commentRoutes = require("./routes/comments.js");
 app.use(express.json({ limit: "50mb" }));
 app.use(helmet());
 app.use(morgan("common"));
+app.use(cookieParser());
 app.use(
   cors({
     credentials: true,

@@ -1,35 +1,36 @@
 import { Box, Flex, Input, HStack, Image } from "@chakra-ui/react";
 import { useState } from "react";
 import jwt_decode from "jwt-decode";
-import useFetch from "./useFetch";
 import { useHistory } from "react-router-dom";
 
-const FriendList = () => {
-  const [searchText, setSearchText] = useState("");
+const FriendList = (props) => {
+  const {peopleList,peopleLoading,peopleError}=props.peopleObj;
+  const [searchText, setSearchText] = useState(null);
   const [showFollowers, setShowFollowers] = useState(false);
   const history = useHistory();
   const changeSearchText = (e) => {
     setSearchText(e.target.value);
+
   };
+  if(!document.cookie.match("jwt")) {
+    history.push("/login");
+    window.location.reload();
+  }
   const userId = jwt_decode(document.cookie).userId;
   const getUserFromId = (id) => {
-    return userList.find((elem) => elem._id === id);
+    return peopleList.find((elem) => elem._id === id);
   };
-  const fetchUsers = useFetch("http://localhost/user/");
-  const userList = fetchUsers.imageList;
-  const userLoading = fetchUsers.loading;
-  const userError = fetchUsers.error;
   const following =
-    !userLoading &&
-    userList.find((elem) => userId === elem._id).following.map((elem) => elem);
+    !peopleLoading &&
+    peopleList.find((elem) => userId === elem._id).following.map((elem) => elem);
   const followingUsername =
-    !userLoading &&
+    !peopleLoading &&
     following.map((elem) => getUserFromId(elem)).map((elem) => elem);
   const followers =
-    !userLoading &&
-    userList.find((elem) => userId === elem._id).followers.map((elem) => elem);
+    !peopleLoading &&
+    peopleList.find((elem) => userId === elem._id).followers.map((elem) => elem);
   const followersUsername =
-    !userLoading &&
+    !peopleLoading &&
     followers.map((elem) => getUserFromId(elem)).map((elem) => elem.username);
   const followingPerson = () => {
     console.log("Hello");
@@ -43,7 +44,7 @@ const FriendList = () => {
   };
   const unfollowUser = async (id) => {
     try {
-      const data = await fetch("http://localhost/user/follow/" + id, {
+      const data = await fetch("http://localhost:1234/user/follow/" + id, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -80,10 +81,9 @@ const FriendList = () => {
           <Input
             placeholder="Search for users"
             value={searchText}
-            onChange={changeSearchText}
           />
         </Box>
-        {userLoading && <Box>Loading....</Box>}
+        {peopleLoading && <Box>Loading....</Box>}
         <HStack spacing="10%">
           <Box
             cursor="pointer"
@@ -101,7 +101,7 @@ const FriendList = () => {
           </Box>
         </HStack>
         {!showFollowers &&
-          !userLoading &&
+          !peopleLoading &&
           followingUsername.map((elem) => (
             <Flex
               mt={10}
@@ -134,13 +134,15 @@ const FriendList = () => {
                   unfollowUser(elem._id);
                 }}
                 cursor="pointer"
+                position = "relative"
+                right="5%"
               >
                Unfollow 
               </Flex>
             </Flex>
           ))}
         {showFollowers &&
-          !userLoading &&
+          !peopleLoading &&
           followersUsername.map((elem) => (
             <Flex
               mt={10}
@@ -165,7 +167,8 @@ const FriendList = () => {
                   {elem.username}
                 </Flex>
               </Flex>
-              <Flex align="center" width="20%" color="#199ff6">
+              <Flex align="center" width="20%" color="#199ff6" position = "relative"
+                right="5%">
                 Follow
               </Flex>
             </Flex>

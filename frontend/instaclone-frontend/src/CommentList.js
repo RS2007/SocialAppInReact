@@ -1,5 +1,4 @@
-import { useParams } from "react-router-dom";
-import useFetch from "./useFetch";
+import { useParams,useHistory } from "react-router-dom";
 import {
   Flex,
   HStack,
@@ -11,76 +10,79 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import jwt_decode from "jwt-decode";
-const CommentList = () => {
-  const postId = useParams().id;
-  const [commentValue, setCommentValue] = useState("");
-  const commentFetch = useFetch("http://localhost/comment");
-  const commentError = commentFetch.error;
-  const commentLoading = commentFetch.loading;
-  const commentList =
-    !commentFetch.loading &&
-    commentFetch.imageList.filter((elem) => elem.postId === postId);
-  const peopleFetch = useFetch("http://localhost/user");
-  const peopleError = peopleFetch.error;
-  const peopleLoading = peopleFetch.loading;
-  const peopleList = peopleFetch.imageList;
-  const likeComment = (id) => {
-    console.log("This is to like the comment");
-    fetch("http://localhost/comment/like/" + id, {
-      method: "PUT",
-      headers: {
-        "Content-type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        userId: jwt_decode(document.cookie).userId,
-      }),
-    });
-    window.location.reload();
-  };
+import axios from "axios";
+const CommentList = (props) => {
 
-  const deleteComment = (id) => {
-    console.log("This is to delete the comment");
-    fetch("http://localhost/comment/delete/" + id, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        userId: jwt_decode(document.cookie).userId,
-      }),
-    });
+  const history=useHistory();
+
+  // ! Getting stuff from props
+  const {peopleList,peopleLoading,peopleError}=props.peopleObj;
+  const {commentListAll,commentLoading,commentError}=props.commentObj;
+
+  // ! PostId extraction from parameters
+  const postId = useParams().id;
+
+  // ! States
+  const [commentValue, setCommentValue] = useState("");
+
+
+  const commentList =
+    !commentLoading &&
+    commentListAll.filter((elem) => elem.postId === postId);
+  
+  // * Handling the Like
+  const likeComment=(id) => {
+    axios.put("http://localhost:1234/comment/like/"+id,{
+      
+    },
+    {withCredentials: true,}).then(data=>{console.log(data)}).catch(err=>{console.log(err.message)}); 
     window.location.reload();
-  };
-  console.log(
-    commentList,
-    peopleList,
-    commentError,
-    peopleError,
-    peopleLoading,
-    commentLoading
-  );
-  const userId = jwt_decode(document.cookie).userId;
+  }
+
+  // * Handling the comment delete
+  // ! delete not sending a cookie thus need a body
+  const deleteComment=(id) => {
+    axios.delete("http://localhost:1234/comment/delete/"+id,{
+      data: {userId: jwt_decode(document.cookie).userId}
+    },{withCredentials: true}).then(data => {console.log(data)}).catch(err => {console.log(err.message)});
+    window.location.reload();
+  }
+ 
+  if(!document.cookie.match('jwt')) {
+    history.push("/login")
+    window.location.reload();
+  } 
+  const userId=jwt_decode(document.cookie).userId;
+  
+
   const changeCommentValue = (e) => {
     setCommentValue(e.target.value);
   };
-  const onSubmit = () => {
-    fetch("http://localhost/comment/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        postId: postId,
-        userId: userId,
-        commentBody: commentValue,
-      }),
-    });
-    window.location.reload(false);
-  };
+  //const onSubmit = () => {
+  //  fetch("http://localhost:1234/comment/", {
+  //    method: "POST",
+  //    headers: {
+  //      "Content-Type": "application/json",
+  //    },
+  //    credentials: "include",
+  //    body: JSON.stringify({
+  //      postId: postId,
+  //      userId: userId,
+  //      commentBody: commentValue,
+  //    }),
+  //  });
+  //  window.location.reload(false);
+  //};
 
+  const onSubmit=() => {
+    axios.post("http://localhost:1234/comment/",{
+      postId: postId,
+      userId: userId,
+      commentBody: commentValue,
+    },{withCredentials: true}).then(data => {console.log(data)}).catch(err => {console.log(err.message)});
+    window.location.reload();
+  }
+  
   return (
     <Flex align="center" justify="center" direction="column">
       <Flex

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 function useFetch(url) {
-  const [imageList, setImageList] = useState(null);
+  const [data,setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -13,13 +13,13 @@ function useFetch(url) {
     })
       .then((res) => res.json())
       .then((data) => {
-        setImageList(data);
+        setData(data);
         setLoading(false);
       })
       .catch((err) => {
         setError(err.message);
       });
   }, [url]);
-  return { imageList, error, loading };
+  return {data, error, loading };
 }
 export default useFetch;

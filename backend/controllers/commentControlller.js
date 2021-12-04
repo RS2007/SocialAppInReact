@@ -1,4 +1,5 @@
 const commentModel = require("../models/commentModel");
+const jwt=require("jsonwebtoken");
 module.exports.getComment = async (req, res) => {
   try {
     const comment = await commentModel.findById(req.params.id);
@@ -29,37 +30,49 @@ module.exports.postComment = async (req, res) => {
   }
 };
 module.exports.deleteComment = async (req, res) => {
-  const comment = await commentModel.findById(req.params.id);
-  if (comment.userId === req.body.userId) {
-    try {
-      await commentModel.findByIdAndDelete(req.params.id);
-    } catch (err) {
-      console.log(err.message);
-    }
-  } else {
-    res.send("You can only delete only your own comment");
+  try {
+    console.log(req.cookies);
+    const currentUserId= req.body.userId;
+    console.log(currentUserId);
+    if(!currentUserId) res.status(400).json({error: "Invalid Login"});
+    const comment=await commentModel.findById(req.params.id);
+    if(comment.userId===currentUserId) {
+      await commentModel.findByIdAndDelete(comment._id);
+      res.status(200).json({message: "Succesfully deleted the comment"});
+    } else {
+      console.log("voo");
+      res.status(400).json({error: "You can delete only your own comment"});
+    } 
+  } catch(err) {
+    console.log(err.message);
+    res.status(400).json({error: err.message})
   }
 };
-module.exports.likeComment = async (req, res) => {
-  const comment = await commentModel.findById(req.params.id);
-  const currentUser = await commentModel.findById(req.body.userId);
-  if (!comment.likes.includes(req.body.userId)) {
-    try {
-      await commentModel.findByIdAndUpdate(req.params.id, {
-        $push: { likes: req.body.userId },
-      });
-      res.send("comment like succesful");
-    } catch (err) {
-      console.log(err.message);
+module.exports.likeComment=async (req,res) => {
+  try {
+    const currentUserId=await jwt.verify(req.cookies.jwt,process.env.JWT_PASS);
+    if(!currentUserId) res.status(400).json({error: "Invalid Login"});
+    const comment=await commentModel.findById(req.params.id);
+    if(!comment.likes.includes(currentUserId.userId)) {
+      try {
+        await commentModel.findByIdAndUpdate(req.params.id,{
+          $push: {likes:currentUserId.userId},
+        });
+        res.send("comment like succesful");
+      } catch(err) {
+        console.log(err.message);
+      }
+    } else {
+      try {
+        await commentModel.findByIdAndUpdate(req.params.id,{
+          $pull: {likes: currentUserId.userId},
+        });
+        res.send("comment like removed succesfuly");
+      } catch(err) {
+        console.log(err.message);
+      }
     }
-  } else {
-    try {
-      await commentModel.findByIdAndUpdate(req.params.id, {
-        $pull: { likes: req.body.userId },
-      });
-      res.send("comment like removed succesfuly");
-    } catch (err) {
-      console.log(err.message);
-    }
+  } catch(err) {
+    console.log(err.message);
   }
-};
+  };

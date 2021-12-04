@@ -10,7 +10,18 @@ import Login from "./Login";
 import PhotoUpload from "./PhotoUpload";
 import FriendList from "./FriendList";
 import Search from "./Search";
+import useFetch from "./useFetch";
 function App() {
+  const peopleFetch = useFetch("http://localhost:1234/user");
+  const peopleList=peopleFetch.data;
+  const peopleLoading=peopleFetch.loading;
+  const peopleError=peopleFetch.error;
+  const peopleObj={peopleList,peopleLoading,peopleError};
+  const commentFetch=useFetch("http://localhost:1234/comment");
+  const commentListAll=commentFetch.data;
+  const commentLoading=commentFetch.loading;
+  const commentError=commentFetch.error;
+  const commentObj={commentListAll,commentLoading,commentError};
   return (
     <Router>
       <ChakraProvider>
@@ -18,22 +29,22 @@ function App() {
         <Switch>
           <Route exact path="/home">
             <Posting />
-            <Posts />
+            <Posts peopleObj={peopleObj} commentObj={commentObj}/>
           </Route>
           <Route path="/upload">
             <PhotoUpload />
           </Route>
           <Route path="/friends">
-            <FriendList />
+            <FriendList peopleObj={peopleObj}/>
           </Route>
           <Route path="/post/:id">
-            <CommentList />
+            <CommentList peopleObj={peopleObj} commentObj={commentObj}/>
           </Route>
           <Route path="/login">
             <Login />
           </Route>
           <Route path="/search">
-            <Search />
+            <Search peopleObj={peopleObj} />
           </Route>
         </Switch>
       </ChakraProvider>

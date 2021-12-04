@@ -1,22 +1,39 @@
 import { Flex, Box, Input, Image } from "@chakra-ui/react";
 import jwt_decode from "jwt-decode"
 import { useState } from "react";
-import useFetch from "./useFetch";
-const Search = () => {
-  const fetchUsers = useFetch("http://localhost/user/");
-  const userList = fetchUsers.imageList;
-  const userLoading = fetchUsers.loading;
-  const userError = fetchUsers.error;
+import { useHistory } from "react-router-dom";
+const Search = (props) => {
+
+  const history=useHistory();
+
+  // ! States
+  const [searchText,setSearchText] = useState("");
+
+  // ! People List
+  const {peopleList,peopleLoading,peopleError}=props.peopleObj;
+
+  // ! Search text handle
   const changeSearchText = (e) => {
     setSearchText(e.target.value);
+    if (searchText.length > 0) {
+      peopleList.filter((user) => {
+      return user.username.match(searchText);
+  });
+  }
   };
-  const [searchText, setSearchText] = useState("");
+  
+  // ! Cookie after a render
+  if(!document.cookie.match("jwt")) {
+    history.push("/login");
+    window.location.reload();
+  }
   const userId = jwt_decode(document.cookie).userId;
-  console.log(userId)
+
+  // ! Follow Button handler
   const follow = async (id)=>{
 
     try {
-      const data = await fetch("http://localhost/user/follow/" + id, {
+      const data = await fetch("http://localhost:1234/user/follow/" + id, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -36,6 +53,7 @@ const Search = () => {
       console.log(err.message);
     }
   };
+  
 
   
   return (
@@ -56,9 +74,9 @@ const Search = () => {
             onChange={changeSearchText}
           />
         </Box>
-        {userLoading && <div>Loading....(Please wait :) )</div>}
-        {!userLoading &&
-          userList.map((elem) => (
+        {peopleLoading && <div>Loading....(Please wait :) )</div>}
+        {!peopleLoading &&
+          peopleList.map((elem,keys) => (
             <Flex
               mt={10}
               width={["90%", "80%", "80%"]}

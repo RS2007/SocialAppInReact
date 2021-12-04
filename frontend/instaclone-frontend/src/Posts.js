@@ -1,23 +1,38 @@
 import { Box, Flex, HStack, Image } from "@chakra-ui/react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { IoChatbubbleOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 import post1 from "./post1.jpg";
 import useFetch from "./useFetch";
 import jwt_decode from "jwt-decode";
 
-const Posts = () => {
-  const { imageList, error, loading } = useFetch("http://localhost/post");
-  const peopleFetch = useFetch("http://localhost/user");
-  const peopleError = peopleFetch.error;
-  const peopleLoading = peopleFetch.loading;
-  const peopleList = peopleFetch.imageList;
-  const commentFetch = useFetch("http://localhost/comment");
-  const commentList = commentFetch.imageList;
-  const commentLoading = commentFetch.loading;
+const Posts = (props) => {
+
+  const history=useHistory();
+
+  const imageFetch = useFetch("http://localhost:1234/post");
+  const imageList = imageFetch.data;
+  const {error,loading}=imageFetch;
+
+  //const peopleFetch = useFetch("http://localhost:1234/user");
+  //const peopleError = peopleFetch.error;
+  //const peopleLoading = peopleFetch.loading;
+  //const peopleList = peopleFetch.imageList;
+  //const commentFetch = useFetch("http://localhost:1234/comment");
+  //const commentList = commentFetch.imageList;
+  //const commentLoading = commentFetch.loading;
+
+  const {peopleList,peopleLoading,peopleError}=props.peopleObj;
+  const {commentListAll,commentLoading,commentError}=props.commentObj;
+
+  if(!document.cookie.match("jwt")) {
+    history.push("/login");
+    window.location.reload();
+  }
+
   const liking = async (id) => {
     console.log("This is a like");
-    const data = await fetch("http://localhost/post/like/" + id, {
+    const data = await fetch("http://localhost:1234/post/like/" + id, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -84,7 +99,7 @@ const Posts = () => {
             w="85%" //{["85%", 500, "80%"]}
             maxW="614px"
           >
-            <Flex justify="space-between" w="100%" background="white" height="5vh">
+            <Flex justify="space-between" w="100%" background="white" height="5vh" paddingTop="5px">
               <Box width="10%" borderRaduis="50%">
                 <Image
                   src={
@@ -96,9 +111,11 @@ const Posts = () => {
                   height="auto"
                   display="inline"
                   objectFit="contain"
+                  marginLeft="2%"
+                 
                 />
               </Box>
-              <Box w="25%">
+              <Box w="25%" marginLeft = "2%">
                 <p>
                   {!peopleLoading &&
                     peopleList.find((people) => people._id === elem.userId)
@@ -123,7 +140,7 @@ const Posts = () => {
                 <Box ml={2}>
                   Comments:
                   {!commentLoading &&
-                    commentList.filter((comment) => comment.postId === elem._id)
+                    commentListAll.filter((comment) => comment.postId === elem._id)
                       .length}
                 </Box>
               </Flex>

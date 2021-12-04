@@ -4,17 +4,25 @@ import { useHistory } from "react-router-dom";
 const Login = () => {
   const history = useHistory();
 
+  // ! States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // ! Email form handler
   const changeEmail = (e) => {
     setEmail(e.target.value);
   };
+
+  // ! Password form handler
   const changePassword = (e) => {
     setPassword(e.target.value);
   };
+
+
+  // ! Login handler
   const login = async () => {
     try {
-      const data = await fetch("http://localhost/auth/login", {
+      const data = await fetch("http://localhost:1234/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,6 +36,9 @@ const Login = () => {
       history.push("/login");
     }
   };
+
+
+
   return (
     <Flex direction="column" align="center" justify="center">
       <Flex direction="column" mt={10} w="30%">

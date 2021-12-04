@@ -5,10 +5,15 @@ import { GoDeviceCamera } from "react-icons/go";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 const Posting = () => {
+
+  // ! States
   const [captionInput, setCaptionInput] = useState("");
+
+  // ! Change Description handler
   const changeCaptionValue = (e) => {
     setCaptionInput(e.target.value);
   };
+
 
   return (
     <Flex

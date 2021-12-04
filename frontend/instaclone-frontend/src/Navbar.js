@@ -5,9 +5,13 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { Link, useHistory } from "react-router-dom";
 const Navbar = () => {
   const history = useHistory();
+
+  // ! Search button handler
   const searchAllUsers = () => {
     history.push("/search");
   };
+
+
   return (
     <HStack justify="space-between" bg="#4167B1" color="white">
       <HStack height="8.1vh" width="70%">

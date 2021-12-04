@@ -123,5 +123,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
+todo.txt
 # End of https://www.toptal.com/developers/gitignore/api/dotenv,node
